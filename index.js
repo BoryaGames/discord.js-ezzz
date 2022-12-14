@@ -49,6 +49,20 @@ function registerCommands() {
           option.setRequired(opt.req);
           cmdo.addUserOption(option);
           break;
+        case "channel":
+          var option = new Discord.SlashCommandChannelOption();
+          option.setName(opt.name);
+          option.setDescription(opt.desc);
+          option.setRequired(opt.req);
+          cmdo.addChannelOption(option);
+          break;
+        case "role":
+          var option = new Discord.SlashCommandRoleOption();
+          option.setName(opt.name);
+          option.setDescription(opt.desc);
+          option.setRequired(opt.req);
+          cmdo.addRoleOption(option);
+          break;
         default:
           break;
       }
@@ -57,14 +71,16 @@ function registerCommands() {
   }
   client.application.commands.set(cmds);
 }
-function nothing() {}
+function handleError(err) {
+  console.log(err);
+}
 function handleInteractionCreate(interaction) {
   if (!interaction.isChatInputCommand()) {
     return !1;
   }
   var cmdj = client.commands.get(interaction.commandName);
   if (cmdj) {
-    cmdj.execute(interaction, client, Discord, fs).catch(nothing);
+    cmdj.execute(interaction, client, Discord, fs).catch(handleError);
   }
 }
 module.exports = {
