@@ -33,6 +33,9 @@ function registerCommands() {
           option.setRequired(opt.req);
           option.setMinValue(opt.min);
           option.setMaxValue(opt.max);
+          if (opt.choices) {
+            option.setChoices(...opt.choices);
+          }
           cmdo.addIntegerOption(option);
           break;
         case "bool":
@@ -63,6 +66,32 @@ function registerCommands() {
           option.setRequired(opt.req);
           cmdo.addRoleOption(option);
           break;
+        case "file":
+          var option = new Discord.SlashCommandAttachmentOption();
+          option.setName(opt.name);
+          option.setDescription(opt.desc);
+          option.setRequired(opt.req);
+          cmdo.addAttachmentOption(option);
+          break;
+        case "number":
+          var option = new Discord.SlashCommandNumberOption();
+          option.setName(opt.name);
+          option.setDescription(opt.desc);
+          option.setRequired(opt.req);
+          option.setMinValue(opt.min);
+          option.setMaxValue(opt.max);
+          if (opt.choices) {
+            option.setChoices(...opt.choices);
+          }
+          cmdo.addNumberOption(option);
+          break;
+        case "mentionable":
+          var option = new Discord.SlashCommandMentionableOption();
+          option.setName(opt.name);
+          option.setDescription(opt.desc);
+          option.setRequired(opt.req);
+          cmdo.addMentionableOption(option);
+          break;
         default:
           break;
       }
@@ -71,8 +100,11 @@ function registerCommands() {
   }
   client.application.commands.set(cmds);
 }
-function handleError(err) {
+function handleError(err, interaction, client, Discord, fs, userHandle) {
   console.log(err);
+  if (userHandle) {
+    return errorFnc();
+  }
 }
 function handleInteractionCreate(interaction) {
   if (!interaction.isChatInputCommand()) {
@@ -80,9 +112,15 @@ function handleInteractionCreate(interaction) {
   }
   var cmdj = client.commands.get(interaction.commandName);
   if (cmdj) {
-    cmdj.execute(interaction, client, Discord, fs).catch(handleError);
+    cmdj.execute(interaction, client, Discord, fs).catch(err => {
+      handleError(err, interaction, client, Discord, fs, !0).catch(err2 => {
+        handleError(err2, interaction, client, Discord, fs, !1);
+      });
+    });
   }
 }
+function nothing() {}
+var errorFnc = nothing;
 module.exports = {
   "start": (token, intents) => {
     client = new Discord.Client({
@@ -92,5 +130,8 @@ module.exports = {
     client.on("ready",handleReady);
     client.on("interactionCreate",handleInteractionCreate);
     return client.login(token);
+  },
+  "setError": f => {
+    errorFnc = f;
   }
 };
