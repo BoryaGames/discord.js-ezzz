@@ -4,7 +4,7 @@ var fs = require("fs");
 function handleReady() {
   var cmds = fs.readdirSync("commands").filter(cmd => cmd.endsWith(".js"));
   for (var cmd of cmds) {
-    var cmdj = require(`./${cmd}`);
+    var cmdj = require(`./commands/${cmd}`);
     client.commands.set(cmdj.name,cmdj);
   }
   registerCommands();
@@ -12,7 +12,6 @@ function handleReady() {
 function registerCommands() {
   var cmds = [];
   for (var cmd of client.commands.values()) {
-    console.log(cmd);
     var cmdo = new Discord.SlashCommandBuilder();
     cmdo.setName(cmd.name).setDescription(cmd.desc).setDMPermission(cmd.dm);
     for (var opt of cmd.opts) {
