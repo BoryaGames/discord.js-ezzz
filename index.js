@@ -2,9 +2,9 @@ var Discord = require("discord.js");
 var client = null;
 var fs = require("fs");
 function handleReady() {
-  var cmds = fs.readdirSync("commands").filter(cmd => cmd.endsWith(".js"));
+  var cmds = fs.readdirSync("slashCommands").filter(cmd => cmd.endsWith(".js"));
   for (var cmd of cmds) {
-    var cmdj = require(`../../commands/${cmd}`);
+    var cmdj = require(`../../slashCommands/${cmd}`);
     client.commands.set(cmdj.name,cmdj);
   }
   registerCommands();
@@ -41,6 +41,14 @@ function registerCommands() {
           option.setDescription(opt.desc);
           option.setRequired(opt.req);
           cmdo.addBooleanOption(option);
+          break;
+        case "user":
+          var option = new Discord.SlashCommandUserOption();
+          option.setName(opt.name);
+          option.setDescription(opt.desc);
+          option.setRequired(opt.req);
+          cmdo.addUserOption(option);
+          break;
         default:
           break;
       }
