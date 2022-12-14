@@ -4,7 +4,7 @@ var fs = require("fs");
 function handleReady() {
   var cmds = fs.readdirSync("commands").filter(cmd => cmd.endsWith(".js"));
   for (var cmd of cmds) {
-    var cmdj = require(`./commands/${cmd}`);
+    var cmdj = require(`../../commands/${cmd}`);
     client.commands.set(cmdj.name,cmdj);
   }
   registerCommands();
