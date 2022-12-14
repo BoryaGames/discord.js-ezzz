@@ -27,7 +27,7 @@ function registerCommands() {
           cmdo.addStringOption(option);
           break;
         case "integer":
-          var option = new Discord.SlashCommandIntegetOption();
+          var option = new Discord.SlashCommandIntegerOption();
           option.setName(opt.name);
           option.setDescription(opt.desc);
           option.setRequired(opt.req);
@@ -35,6 +35,12 @@ function registerCommands() {
           option.setMaxValue(opt.max);
           cmdo.addIntegerOption(option);
           break;
+        case "bool":
+          var option = new Discord.SlashCommandBooleanOption();
+          option.setName(opt.name);
+          option.setDescription(opt.desc);
+          option.setRequired(opt.req);
+          cmdo.addBooleanOption(option);
         default:
           break;
       }
