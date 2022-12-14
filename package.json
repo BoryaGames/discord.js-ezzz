@@ -1,6 +1,6 @@
 {
   "name": "discord.js-ezzz",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Make discord slash commands very easy!",
   "main": "index.js",
   "scripts": {
