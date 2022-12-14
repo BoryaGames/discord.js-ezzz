@@ -12,6 +12,7 @@ function handleReady() {
 function registerCommands() {
   var cmds = [];
   for (var cmd of client.commands.values()) {
+    console.log(cmd);
     var cmdo = new Discord.SlashCommandBuilder();
     cmdo.setName(cmd.name).setDescription(cmd.desc).setDMPermission(cmd.dm);
     for (var opt of cmd.opts) {
