@@ -100,7 +100,7 @@ function registerCommands() {
   }
   client.application.commands.set(cmds);
 }
-function handleError(err, interaction, client, Discord, fs, userHandle) {
+async function handleError(err, interaction, client, Discord, fs, userHandle) {
   console.log(err);
   if (userHandle) {
     return errorFnc();
